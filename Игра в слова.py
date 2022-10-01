@@ -1,6 +1,8 @@
 import requests
 import lxml
 from bs4 import BeautifulSoup
+from urllib.parse import quote
+
 words = {
     "а":"90",
     "б":"91",
@@ -38,6 +40,21 @@ word_out = []
 
 word_counts = 0
 w = ""
+
+def check(word):
+    url = f"https://morphological.ru/{quote(word)}"
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, "lxml")
+    aa = soup.find_all("table", class_="table table-bordered table-condensed table-striped")
+
+    for i in aa:
+        g = i.tbody.tr.text.split()
+        for word in g:
+            if word == "существительное":
+                return True
+
+        return False
+
 def wordes(words,tail_word):
     global w
     url = f"http://www.reright.ru/words/%D0%{words[tail_word]}/"
@@ -50,33 +67,40 @@ def wordes(words,tail_word):
         word_i = i.text
 
         if word_i in word_out:
-            print("слово есть !")
+            continue
+        else:
+            if check(word_i):
 
-        if word_i not in word_out:
-            print(word_i)
-            word_out.append(word_i)
+                print(word_i)
+                word_out.append(word_i)
 
-            if word_i[-1] == 'ъ' or word_i[-1] == 'ь' or word_i[-1] == 'ы':
-                print(f"Тебе на {word_i[-2]}")
-                w = word_i[-2]
+                if word_i[-1] == 'ъ' or word_i[-1] == 'ь' or word_i[-1] == 'ы':
+                    print(f"Тебе на {word_i[-2]}")
+                    w = word_i[-2]
+
+                else:
+                    print(f"Тебе на {word_i[-1]}")
+                    w = word_i[-1]
+
 
             else:
-                print(f"Тебе на {word_i[-1]}")
-                w = word_i[-1]
-
+                word_out.append(word_i)
+                wordes(words,tail_word)
         return
 def game():
     print("-"*74)
     word = input("Введите слово: ").lower()
+    if check(word):
+        if word[0] != w and word_counts >0:
+            print(f"Нет тебе надо на {w}")
+            game()
 
-    if word[0] != w and word_counts >0:
-        print(f"Нет тебе надо на {w}")
+        elif word in word_out:
+            print(f"Слово {word} уже было ")
+            game()
+    else:
+        print("слово должно быть существительным!")
         game()
-
-    elif word in word_out:
-        print(f"Слово {word} уже было ")
-        game()
-
     tail_word = word[-1]
 
     if tail_word == "ь" or tail_word == "Ъ" or tail_word == "ы":
@@ -178,4 +202,3 @@ def main_menu():
 
 
 main_menu()
-
