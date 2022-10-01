@@ -38,35 +38,8 @@ word_out = []
 
 word_counts = 0
 w = ""
-def izi_game(*args):
-    global words
-    global word_counts
+def wordes(words,tail_word):
     global w
-
-    if word_counts == 25:
-        print("Вы победили!!!")
-        exit()
-    if word_counts > 0:
-        word = input("Введите слово: ")
-        word = word.lower()
-        if word[:1:] != w:
-            print(f"Неееет тебе надо на {w}")
-            izi_game()
-
-    if word_counts == 0:
-        word = input("Введите слово: ")
-        word = word.lower()
-
-    if word in word_out:
-        print(f"Слово {word} уже было ")
-        izi_game()
-
-    tail_word = word[-1]
-
-    if tail_word == "ь" or tail_word == "Ъ" or tail_word == "ы":
-        tail_word = word[-2]
-
-    word_out.append(word)
     url = f"http://www.reright.ru/words/%D0%{words[tail_word]}/"
     response = requests.get(url)
     soup = BeautifulSoup(response.text, "lxml")
@@ -91,11 +64,49 @@ def izi_game(*args):
                 print(f"Тебе на {word_i[-1]}")
                 w = word_i[-1]
 
-            izi_game()
-            word_counts += 1
+        return
+def game():
+    print("-"*74)
+    word = input("Введите слово: ").lower()
+
+    if word[0] != w and word_counts >0:
+        print(f"Нет тебе надо на {w}")
+        game()
+
+    elif word in word_out:
+        print(f"Слово {word} уже было ")
+        game()
+
+    tail_word = word[-1]
+
+    if tail_word == "ь" or tail_word == "Ъ" or tail_word == "ы":
+        tail_word = word[-2]
+
+    return word,tail_word
+
+def izi_game(*args):
+
+    global w
+    global words
+    global word_counts
+
+    if word_counts == 25:
+        print("Вы победили!!!")
+        exit()
+
+    word,tail_word=game()
+
+    word_out.append(word)
+
+    wordes(words,tail_word)
+
+    word_counts += 1
+    izi_game()
 
 
 def medium_game():
+
+    global w
     global words
     global word_counts
 
@@ -103,43 +114,15 @@ def medium_game():
         print("Вы победили!!!")
         exit()
 
-    word = input("Введите слово: ")
-    word = word.lower()
+    word, tail_word = game()
 
-    if word in word_out:
-        print(f"Слово {word} уже было ")
-        izi_game()
+    wordes(words, tail_word)
 
-    tail_word = word[-1]
-
-    if tail_word == "ь" or tail_word == "Ъ" or tail_word == "ы":
-        tail_word = word[-2]
-
-    word_out.append(word)
-    url = f"http://www.reright.ru/words/%D0%{words[tail_word]}/"
-    response = requests.get(url)
-    soup = BeautifulSoup(response.text, "lxml")
-    aa = soup.find_all("div", class_="col-md-3 col-sm-3 col-xs-6")
-
-    for i in aa:
-        word_i = i.text
-
-        if word_i in word_out:
-            print("слово есть !")
-
-        if word_i not in word_out:
-            print(word_i)
-            word_out.append(word_i)
-
-            if word_i[-1] == 'ъ' or word_i[-1] == 'ь' or word_i[-1] == 'ы':
-                print(f"Тебе на {word_i[-2]}")
-
-            else:
-                print(f"Тебе на {word_i[-1]}")
-            word_counts += 1
-            medium_game()
+    word_counts += 1
+    medium_game()
 
 def Hard_game():
+    global w
     global words
     global word_counts
 
@@ -147,93 +130,46 @@ def Hard_game():
         print("Вы победили!!!")
         exit()
 
-    word = input("Введите слово: ")
-    word = word.lower()
+    word, tail_word = game()
 
-    if word in word_out:
-        print(f"Слово {word} уже было ")
-        izi_game()
+    wordes(words, tail_word)
 
-    tail_word = word[-1]
-    if tail_word == "ь" or tail_word == "Ъ" or tail_word == "ы":
-        tail_word = word[-2]
+    word_counts += 1
 
-    word_out.append(word)
-    url = f"http://www.reright.ru/words/%D0%{words[tail_word]}/"
-    response = requests.get(url)
-    soup = BeautifulSoup(response.text, "lxml")
-    aa = soup.find_all("div", class_="col-md-3 col-sm-3 col-xs-6")
-
-    for i in aa:
-        word_i = i.text
-
-        if word_i in word_out:
-            print("слово есть !")
-
-        if word_i not in word_out:
-            print(word_i)
-            word_out.append(word_i)
-
-            if word_i[-1] == 'ъ' or word_i[-1] == 'ь' or word_i[-1] == 'ы':
-                print(f"Тебе на {word_i[-2]}")
-
-            else:
-                print(f"Тебе на {word_i[-1]}")
-            word_counts += 1
-            Hard_game()
+    Hard_game()
 
 def unreal_game():
+
     global words
-    word = input("Введите слово: ")
-    word = word.lower()
 
-    if word in word_out:
-        print(f"Слово {word} уже было ")
-        izi_game()
+    word,tail_word=game()
 
-    tail_word = word[-1]
+    wordes(words, tail_word)
 
-    if tail_word == "ь" or tail_word == "Ъ" or tail_word == "ы":
-        tail_word = word[-2]
-
-    word_out.append(word)
-    url = f"http://www.reright.ru/words/%D0%{words[tail_word]}/"
-    response = requests.get(url)
-    soup = BeautifulSoup(response.text, "lxml")
-    aa = soup.find_all("div", class_="col-md-3 col-sm-3 col-xs-6")
-
-    for i in aa:
-        word_i = i.text
-
-        if word_i in word_out:
-            print("слово есть !")
-
-        if word_i not in word_out:
-            print(word_i)
-            word_out.append(word_i)
-
-            if word_i[-1] == 'ъ' or word_i[-1] == 'ь' or word_i[-1] == 'ы':
-                print(f"Тебе на {word_i[-2]}")
-
-            else:
-                print(f"Тебе на {word_i[-1]}")
-
-            unreal_game()
+    unreal_game()
 
 def main_menu():
 
     num = input("Выберете режим игры\n1-простой\n2-средний\n3-сложный\n4-не реальный!\n")
 
     if num == '1':
+        print("-"*30,"Правила игры","-"*30)
+        print("-"*20,"Для победы нужно набрать 25 балов!","-"*18)
         izi_game()
 
     elif num == '2':
-        main_menu()
+        print("-"*30,"Правила игры","-"*30)
+        print("-"*20,"Для победы нужно набрать 50 балов!","-"*18)
+        medium_game()
 
     elif num == '3':
+        print("-"*30,"Правила игры","-"*30)
+        print("-"*20,"Для победы нужно набрать 100 балов!","-"*18)
         Hard_game()
 
     elif num == '4':
+        print("-"*30,"Правила игры","-"*30)
+        print("-"*25,"Здесь нельзя победить!","-"*25)
         unreal_game()
 
     else:
