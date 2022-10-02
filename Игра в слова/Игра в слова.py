@@ -3,39 +3,6 @@ import lxml
 from bs4 import BeautifulSoup
 from urllib.parse import quote
 
-words = {
-    "а":"90",
-    "б":"91",
-    "в":"92",
-    "г":"93",
-    "д":"94",
-    "е":"95",
-    "ё":"81",
-    "ж":"96",
-    "з":"97",
-    "и":"98",
-    "й":"99",
-    "к":"9A",
-    "л":"9B",
-    "м":"9C",
-    "н":"9D",
-    "о":"9E",
-    "п":"9F",
-    "р":"A0",
-    "с":"A1",
-    "т":"A2",
-    "у":"A3",
-    "ф":"A4",
-    "х":"A5",
-    "ц":"A6",
-    "ч":"A7",
-    "ш":"A8",
-    "щ":"A9",
-    "э":"AD",
-    "ю":"AE",
-    "я":"AF",
-    "ы":"AB",
-}
 word_out = []
 
 word_counts = 0
@@ -55,9 +22,9 @@ def check(word):
 
         return False
 
-def wordes(words,tail_word):
+def wordes(tail_word):
     global w
-    url = f"http://www.reright.ru/words/%D0%{words[tail_word]}/"
+    url = f"http://www.reright.ru/words/{quote(tail_word)}/"
     response = requests.get(url)
     soup = BeautifulSoup(response.text, "lxml")
     aa = soup.find_all("div", class_="col-md-3 col-sm-3 col-xs-6")
@@ -65,12 +32,10 @@ def wordes(words,tail_word):
     for i in aa:
 
         word_i = i.text
-
         if word_i in word_out:
             continue
         else:
             if check(word_i):
-
                 print(word_i)
                 word_out.append(word_i)
 
@@ -85,7 +50,7 @@ def wordes(words,tail_word):
 
             else:
                 word_out.append(word_i)
-                wordes(words,tail_word)
+                wordes(tail_word)
         return
 def game():
     print("-"*74)
@@ -111,7 +76,6 @@ def game():
 def izi_game(*args):
 
     global w
-    global words
     global word_counts
 
     if word_counts == 25:
@@ -122,7 +86,7 @@ def izi_game(*args):
 
     word_out.append(word)
 
-    wordes(words,tail_word)
+    wordes(tail_word)
 
     word_counts += 1
     izi_game()
@@ -131,7 +95,6 @@ def izi_game(*args):
 def medium_game():
 
     global w
-    global words
     global word_counts
 
     if word_counts == 50:
@@ -140,14 +103,13 @@ def medium_game():
 
     word, tail_word = game()
 
-    wordes(words, tail_word)
+    wordes(tail_word)
 
     word_counts += 1
     medium_game()
 
 def Hard_game():
     global w
-    global words
     global word_counts
 
     if word_counts == 100:
@@ -156,7 +118,7 @@ def Hard_game():
 
     word, tail_word = game()
 
-    wordes(words, tail_word)
+    wordes(tail_word)
 
     word_counts += 1
 
@@ -164,11 +126,10 @@ def Hard_game():
 
 def unreal_game():
 
-    global words
 
     word,tail_word=game()
 
-    wordes(words, tail_word)
+    wordes(tail_word)
 
     unreal_game()
 
