@@ -3,17 +3,19 @@ import lxml
 from bs4 import BeautifulSoup
 from urllib.parse import quote
 
-word_out = []
 
-word_counts = 0
+word_out = [] #list of words used
+
+word_counts = 0 #how many words are used
 w = ""
 
-def check(word):
-    url = f"https://morphological.ru/{quote(word)}"
-    response = requests.get(url)
+def check(word): #checking a word for a part of speech
+    url = f"https://morphological.ru/{quote(word)}"#click on the link to the website
+    response = requests.get(url)#getting the page code
     soup = BeautifulSoup(response.text, "lxml")
     aa = soup.find_all("table", class_="table table-bordered table-condensed table-striped")
 
+#iterating through the code to find the desired section
     for i in aa:
         g = i.tbody.tr.text.split()
         for word in g:
@@ -22,7 +24,7 @@ def check(word):
 
         return False
 
-def wordes(tail_word):
+def wordes(tail_word): #getting a list of words for the desired letter
     global w
     url = f"http://www.reright.ru/words/{quote(tail_word)}/"
     response = requests.get(url)
@@ -52,7 +54,8 @@ def wordes(tail_word):
                 word_out.append(word_i)
                 wordes(tail_word)
         return
-def game():
+def game(): #The main part of the game, with word input
+
     print("-"*74)
     word = input("Введите слово: ").lower()
     if check(word):
@@ -73,7 +76,7 @@ def game():
 
     return word,tail_word
 
-def izi_game(*args):
+def izi_game(*args): #easy level of play
 
     global w
     global word_counts
@@ -92,7 +95,7 @@ def izi_game(*args):
     izi_game()
 
 
-def medium_game():
+def medium_game(): #the average level of the game
 
     global w
     global word_counts
@@ -108,7 +111,7 @@ def medium_game():
     word_counts += 1
     medium_game()
 
-def Hard_game():
+def Hard_game(): #challenging game level
     global w
     global word_counts
 
@@ -124,7 +127,7 @@ def Hard_game():
 
     Hard_game()
 
-def unreal_game():
+def unreal_game(): #endless game level
 
 
     word,tail_word=game()
@@ -133,7 +136,7 @@ def unreal_game():
 
     unreal_game()
 
-def main_menu():
+def main_menu(): #Main Menu
 
     num = input("Выберете режим игры\n1-простой\n2-средний\n3-сложный\n4-не реальный!\n")
 
