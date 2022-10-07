@@ -1,4 +1,4 @@
-def mainMenu():
+def mainMenu(): #Main Menu
     print("Выбор кодировки")
     code = int(input("Выберете номер желаемой кодировки:\n1-Шифир Виженера\n"))
     if code == 1:
@@ -8,10 +8,10 @@ def mainMenu():
         print("Не корректный ввод!")
         mainMenu()
 
-def Venger():
+def Venger(): #Function with encoding
     alf = ['а', 'б', 'в', 'г', 'д', 'е', 'ё', 'ж', 'з', 'и', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ъ', 'ы', 'ь', 'э', 'ю','я']
-    per = int(input("Выберете действие:\n1-шифровка\n2-расшифровка\n>>>  "))
-    new_text = []
+    per = int(input("Выберете действие:\n1-шифровка\n2-расшифровка\n>>>  "))  #choosing an action encoding or decryption
+    new_text = [] # new text after decryption
     if per == 1:
         tr = 0
         text = input("Введите текст для кодировки: ").lower()
