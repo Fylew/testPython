@@ -29,5 +29,5 @@ for word in tqdm(alf[0]):
 print(len(word_list))
 f = open("WordBase.txt", "w")
 for i in tqdm(word_list):
-    f.write(i+ "\n")
+    f.write(i + "\n")
     time.sleep(1)
