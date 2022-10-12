@@ -2,13 +2,21 @@ import requests
 import lxml
 from bs4 import BeautifulSoup
 from urllib.parse import quote
-
+import random
 
 word_out = [] #list of words used
 
 word_counts = 0 #how many words are used
 w = ""
+alf = ["абвгдеёжзийклмнопрстуфхцчшщъыьэюя"]
 
+word = open("DB.py","r")
+dikt = {}
+for alfa in alf[0]:
+    dikt[alfa]=[]
+for i in word:
+    i=i[:-1]
+    dikt[i[0]].append(i)
 def check(word): #checking a word for a part of speech
     url = f"https://morphological.ru/{quote(word)}"#click on the link to the website
     response = requests.get(url)#getting the page code
@@ -26,56 +34,47 @@ def check(word): #checking a word for a part of speech
 
 def wordes(tail_word): #getting a list of words for the desired letter
     global w
-    url = f"http://www.reright.ru/words/{quote(tail_word)}/"
-    response = requests.get(url)
-    soup = BeautifulSoup(response.text, "lxml")
-    aa = soup.find_all("div", class_="col-md-3 col-sm-3 col-xs-6")
 
-    for i in aa:
+    word = random.choice(dikt[tail_word])
+    if word in word_out:
+        word = random.choice(dikt[tail_word])
+    print(word)
 
-        word_i = i.text
-        if word_i in word_out:
-            continue
-        else:
-            if check(word_i):
-                print(word_i)
-                word_out.append(word_i)
-
-                if word_i[-1] == 'ъ' or word_i[-1] == 'ь' or word_i[-1] == 'ы':
-                    print(f"Тебе на {word_i[-2]}")
-                    w = word_i[-2]
-
-                else:
-                    print(f"Тебе на {word_i[-1]}")
-                    w = word_i[-1]
-
-
-            else:
-                word_out.append(word_i)
-                wordes(tail_word)
-        return
-def game(): #The main part of the game, with word input
-
-    print("-"*74)
-    word = input("Введите слово: ").lower()
-    if check(word):
-        if word[0] != w and word_counts >0:
-            print(f"Нет тебе надо на {w}")
-            game()
-
-        elif word in word_out:
-            print(f"Слово {word} уже было ")
-            game()
+    if word[-1] == "ъ" or word[-1] == "ы" or word[-1] == 'ь':
+        w = word[-2]
+        word_out.append(word)
+        print(f"Тебе на {w}")
     else:
+        w = word[-1]
+        word_out.append(word)
+        print(f"Тебе на {w}")
+
+
+def game(): #The main part of the game, with word input
+    global w
+
+    print("-" * 74)
+    word = input("Введите слово: ").lower()
+
+    if word[0] != w and word_counts > 0:
+        print(f"Нет тебе надо на {w}")
+        game()
+
+    elif word in word_out:
+        print(f"Слово {word} уже было ")
+        game()
+
+    elif not check(word):
         print("слово должно быть существительным!")
         game()
+
     tail_word = word[-1]
 
     if tail_word == "ь" or tail_word == "Ъ" or tail_word == "ы":
         tail_word = word[-2]
 
-    return word,tail_word
-
+    word_out.append(word)
+    return tail_word
 def izi_game(*args): #easy level of play
 
     global w
@@ -85,13 +84,12 @@ def izi_game(*args): #easy level of play
         print("Вы победили!!!")
         exit()
 
-    word,tail_word=game()
-
-    word_out.append(word)
+    tail_word=game()
 
     wordes(tail_word)
 
     word_counts += 1
+    print("До победы осталось {} слов".format(25 - word_counts))
     izi_game()
 
 
@@ -104,11 +102,12 @@ def medium_game(): #the average level of the game
         print("Вы победили!!!")
         exit()
 
-    word, tail_word = game()
+    tail_word = game()
 
     wordes(tail_word)
 
     word_counts += 1
+    print("До победы осталось {} слов".format(50- word_counts))
     medium_game()
 
 def Hard_game(): #challenging game level
@@ -119,18 +118,18 @@ def Hard_game(): #challenging game level
         print("Вы победили!!!")
         exit()
 
-    word, tail_word = game()
+    tail_word = game()
 
     wordes(tail_word)
 
     word_counts += 1
-
+    print("До победы осталось {} слов".format(100- word_counts))
     Hard_game()
 
 def unreal_game(): #endless game level
 
 
-    word,tail_word=game()
+    tail_word=game()
 
     wordes(tail_word)
 
