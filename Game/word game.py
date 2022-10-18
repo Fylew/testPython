@@ -1,8 +1,12 @@
+import tkinter as tk
 import requests
 import lxml
 from bs4 import BeautifulSoup
 from urllib.parse import quote
 import random
+
+win = tk.Tk()
+win.mainloop()
 
 word_out = [] #list of words used
 
@@ -164,6 +168,5 @@ def main_menu(): #Main Menu
     else:
         print("Не корректный ввод!")
         main_menu()
-
 
 main_menu()
