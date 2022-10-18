@@ -49,6 +49,8 @@ def wordes(tail_word): #getting a list of words for the desired letter
         word_out.append(word)
         print(f"Тебе на {w}")
 
+    word_out.append(word)
+
 
 def game(): #The main part of the game, with word input
     global w
