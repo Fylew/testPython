@@ -26,9 +26,9 @@ def medium_game(word_in_game,ww,worde): #the average level of the game
     label1['text'] = "Простой режим\n" \
                      "нужно назвать {} слов(а) для победы!".format(49 - word_counts)
 
-    if word_counts == 50:
+    if word_counts == 49:
         label1['text'] = "Вы победили!!!"
-        exit()
+
 
     tail_word = game(word_in_game,ww)
 
@@ -47,9 +47,9 @@ def Hard_game(word_in_game,ww,worde): #challenging game level
     label1['text'] = "Простой режим\n" \
                      "нужно назвать {} слов(а) для победы!".format(99 - word_counts)
 
-    if word_counts == 100:
+    if word_counts == 99:
         label1['text'] = "Вы победили!!!"
-        exit()
+
 
     tail_word = game(word_in_game,ww)
 
@@ -80,9 +80,9 @@ def izi_game(word_in_game,ww,worde): #easy level of play
 
     label1['text'] = "Простой режим\n" \
                      "нужно назвать {} слов(а) для победы!".format(24 - word_counts)
-    if word_counts == 25:
+    if word_counts == 24:
         label1['text'] = "Вы победили!!!"
-        exit()
+
 
     tail_word=game(word_in_game,ww)
 
@@ -132,11 +132,11 @@ def game(word,ww): #The main part of the game, with word input
     word=word.lower()
     print(word)
     if word[0] != w and word_counts > 0:
-        ww['text']=f"Нет слово должно быть на букву {w}"
+        ww['text']=f"Нет, слово должно быть на букву {w}"
         izi()
 
     elif word in word_out:
-        ww['text']=f"Слово {word}уже было!"
+        ww['text']=f"Слово {word} уже было!"
         izi()
 
     elif not check(word):
